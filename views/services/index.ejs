@@ -1,0 +1,58 @@
+<%- include("../partials/head") %>
+<%- include("../partials/navbar") %>
+
+<section class="section-padding">
+
+<div class="container">
+
+<h1 class="display-5 fw-bold mb-5">
+Services
+</h1>
+
+<div class="row g-4">
+
+<% services.forEach(service=>{ %>
+
+<div class="col-lg-4">
+
+<div class="service-card h-100">
+
+<div class="service-icon">
+
+<i class="bi <%= service.icon %>"></i>
+
+</div>
+
+<h3 class="mt-4">
+
+<%= service.title %>
+
+</h3>
+
+<p>
+
+<%= service.description %>
+
+</p>
+
+<a
+class="btn btn-dark mt-auto"
+href="/services/<%= service.slug %>">
+
+View Packages
+
+</a>
+
+</div>
+
+</div>
+
+<% }) %>
+
+</div>
+
+</div>
+
+</section>
+
+<%- include("../partials/footer") %>

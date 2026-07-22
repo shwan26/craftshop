@@ -1,0 +1,94 @@
+<%- include("../partials/head") %>
+<%- include("../partials/navbar") %>
+
+<section class="section-padding">
+
+<div class="container">
+
+<a href="/services">
+
+← Back
+
+</a>
+
+<h1 class="display-4 mt-3">
+
+<%= service.title %>
+
+</h1>
+
+<p class="lead">
+
+<%= service.description %>
+
+</p>
+
+<div class="row mt-5 g-4">
+
+<% service.packages.forEach(pkg=>{ %>
+
+<div class="col-lg-4">
+
+<div class="card h-100">
+
+<div class="card-body">
+
+<h3>
+
+<%= pkg.name %>
+
+</h3>
+
+<h2 class="text-warning">
+
+$<%= pkg.price %>
+
+</h2>
+
+<p>
+
+Delivery
+
+<%= pkg.deliveryDays %>
+
+days
+
+</p>
+
+<ul>
+
+<% pkg.features.forEach(feature=>{ %>
+
+<li>
+
+<%= feature %>
+
+</li>
+
+<% }) %>
+
+</ul>
+
+<a
+href="#"
+class="btn btn-primary w-100">
+
+Add to Cart
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<% }) %>
+
+</div>
+
+</div>
+
+</section>
+
+<%- include("../partials/footer") %>

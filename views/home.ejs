@@ -1,0 +1,96 @@
+<%- include("partials/head") %>
+<%- include("partials/navbar") %>
+<%- include("partials/messages") %>
+
+<main>
+  <section class="simple-hero">
+    <div class="container text-center">
+      <p class="simple-brand">CraftShop</p>
+
+      <h1 class="display-3 fw-bold">
+        Professional Digital Services
+      </h1>
+
+      <p class="lead simple-hero-text">
+        Straightforward digital services for businesses,
+        creators, students, and professionals.
+      </p>
+
+      <a href="/services" class="btn btn-primary btn-lg px-5 mt-3">
+        Browse Services
+      </a>
+
+      <div class="service-checklist">
+        <span>
+          <i class="bi bi-check-circle-fill"></i>
+          Website Development
+        </span>
+
+        <span>
+          <i class="bi bi-check-circle-fill"></i>
+          Canva Design
+        </span>
+
+        <span>
+          <i class="bi bi-check-circle-fill"></i>
+          Resume Design
+        </span>
+
+        <span>
+          <i class="bi bi-check-circle-fill"></i>
+          Social Media
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-padding featured-simple">
+    <div class="container">
+      <div class="text-center mb-5">
+        <p class="section-label">Featured Services</p>
+
+        <h2 class="display-5 fw-bold">
+          Services built to get the job done
+        </h2>
+      </div>
+
+      <div class="row g-4">
+        <% featuredServices.forEach((service) => { %>
+          <div class="col-md-6 col-lg-4">
+            <article class="service-card">
+              <div class="service-icon">
+                <i class="bi <%= service.icon %>"></i>
+              </div>
+
+              <h3 class="h4 fw-bold mt-4">
+                <%= service.title %>
+              </h3>
+
+              <p class="text-secondary">
+                <%= service.description %>
+              </p>
+
+              <div class="mt-auto pt-3">
+                <p class="mb-3">
+                  Starting from
+                  <strong class="service-price">
+                    $<%= service.price %>
+                  </strong>
+                </p>
+
+                <a
+                  href="/services"
+                  class="btn btn-dark w-100"
+                >
+                  View Service
+                </a>
+              </div>
+            </article>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+</main>
+
+<%- include("partials/footer") %>
