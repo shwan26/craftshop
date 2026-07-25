@@ -10,7 +10,7 @@ async function startServer() {
   try {
     await connectDatabase();
 
-    const server = app.listen(env.PORT, () => {
+    const server = app.listen(env.PORT, "0.0.0.0", () => {
       console.log(
         `CraftShop running in ${env.NODE_ENV} mode`
       );
