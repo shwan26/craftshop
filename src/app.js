@@ -22,6 +22,7 @@ import checkoutRoutes from "./routes/checkoutRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import workspaceRoutes from "./routes/workspaceRoutes.js";
+import healthRoutes from "./routes/healthRoutes.js";
 
 const app = express();
 
@@ -101,6 +102,7 @@ app.use(
 );
 
 app.use(normalizeInput);
+app.use(healthRoutes);
 
 app.use(generalLimiter);
 

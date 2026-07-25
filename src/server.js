@@ -1,7 +1,8 @@
 import "dotenv/config";
 
-import app from "./app.js";
+import mongoose from "mongoose";
 
+import app from "./app.js";
 import { connectDatabase } from "./config/database.js";
 import { env } from "./config/env.js";
 
@@ -9,30 +10,50 @@ async function startServer() {
   try {
     await connectDatabase();
 
-    const server = app.listen(
-      env.PORT,
-      () => {
-        console.log(
-          `CraftShop running in ${env.NODE_ENV} mode`
-        );
+    const server = app.listen(env.PORT, () => {
+      console.log(
+        `CraftShop running in ${env.NODE_ENV} mode`
+      );
 
-        console.log(
-          `Server: http://localhost:${env.PORT}`
-        );
-      }
-    );
+      console.log(
+        `Server listening on port ${env.PORT}`
+      );
+    });
+
+    let shuttingDown = false;
 
     async function shutdown(signal) {
-      console.log(`${signal} received. Shutting down...`);
+      if (shuttingDown) {
+        return;
+      }
 
-      server.close(() => {
-        console.log("HTTP server closed.");
-        process.exit(0);
+      shuttingDown = true;
+
+      console.log(
+        `${signal} received. Starting graceful shutdown.`
+      );
+
+      server.close(async () => {
+        try {
+          await mongoose.connection.close();
+
+          console.log("MongoDB connection closed.");
+          console.log("HTTP server closed.");
+
+          process.exit(0);
+        } catch (error) {
+          console.error(
+            "Shutdown failed:",
+            error
+          );
+
+          process.exit(1);
+        }
       });
 
       setTimeout(() => {
         console.error(
-          "Forced shutdown after timeout."
+          "Forced shutdown after 10 seconds."
         );
 
         process.exit(1);

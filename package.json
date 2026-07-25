@@ -8,9 +8,10 @@
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
-    "seed": "node src/seed.js",
-    "reset-password": "node src/resetPassword.js",
-    "backfill-orders": "node src/backfillOrderHistory.js"
+    "seed": "node src/seed.js"
+  },
+  "engines": {
+    "node": ">=20.0.0 <25.0.0"
   },
   "keywords": [],
   "author": "",
