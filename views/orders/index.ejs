@@ -1,0 +1,103 @@
+<%- include("../partials/head") %>
+<%- include("../partials/navbar") %>
+<%- include("../partials/messages") %>
+
+<main>
+  <section class="page-header">
+    <div class="container">
+      <p class="section-label">Customer account</p>
+
+      <h1 class="display-5 fw-bold mb-2">
+        My Orders
+      </h1>
+
+      <p class="text-secondary mb-0">
+        Review your current and previous CraftShop projects.
+      </p>
+    </div>
+  </section>
+
+  <section class="orders-section">
+    <div class="container">
+      <% if (orders.length === 0) { %>
+        <div class="empty-cart">
+          <div class="empty-cart-icon">
+            <i class="bi bi-receipt"></i>
+          </div>
+
+          <h2 class="h3 fw-bold">
+            No orders yet
+          </h2>
+
+          <p class="text-secondary">
+            Choose a service package to start your first project.
+          </p>
+
+          <a href="/services" class="btn btn-primary">
+            Browse Services
+          </a>
+        </div>
+      <% } else { %>
+        <div class="order-list">
+          <% orders.forEach((order) => { %>
+            <article class="order-list-card">
+              <div class="order-list-main">
+                <div>
+                  <p class="order-number mb-1">
+                    <%= order.orderNumber %>
+                  </p>
+
+                  <h2 class="h5 fw-bold mb-2">
+                    <%= order.items
+                      .map((item) => item.serviceTitle)
+                      .join(", ") %>
+                  </h2>
+
+                  <p class="text-secondary small mb-0">
+                    Ordered
+                    <%= new Date(
+                      order.createdAt
+                    ).toLocaleDateString() %>
+                    ·
+                    <%= order.items.length %>
+                    <%= order.items.length === 1
+                      ? "service"
+                      : "services" %>
+                  </p>
+                </div>
+
+                <div class="order-list-side">
+                  <span
+                    class="status-badge status-<%= order.status %>"
+                  >
+                    <%= order.status.replace("-", " ") %>
+                  </span>
+
+                  <strong>
+                    $<%= order.total.toFixed(2) %>
+                  </strong>
+                </div>
+              </div>
+
+              <div class="order-list-footer">
+                <span>
+                  Contact:
+                  <%= order.contactEmail %>
+                </span>
+
+                <a
+                  href="/orders/<%= order._id %>"
+                  class="btn btn-sm btn-outline-dark"
+                >
+                  View Details
+                </a>
+              </div>
+            </article>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+  </section>
+</main>
+
+<%- include("../partials/footer") %>

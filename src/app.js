@@ -11,6 +11,11 @@ import homeRoutes from "./routes/homeRoutes.js";
 import serviceRoutes from "./routes/serviceRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
+import cartRoutes from "./routes/cartRoutes.js";
+import checkoutRoutes from "./routes/checkoutRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
+import workspaceRoutes from "./routes/workspaceRoutes.js";
 
 const app = express();
 
@@ -69,6 +74,11 @@ app.use("/", homeRoutes);
 app.use("/services", serviceRoutes);
 app.use(authRoutes);
 app.use("/dashboard", dashboardRoutes);
+app.use("/cart", cartRoutes);
+app.use("/checkout", checkoutRoutes);
+app.use("/orders", orderRoutes);
+app.use("/admin", adminRoutes);
+app.use("/", workspaceRoutes);
 
 app.use((req, res) => {
   res.status(404).render("404", {

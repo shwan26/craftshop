@@ -1,94 +1,129 @@
 <%- include("../partials/head") %>
 <%- include("../partials/navbar") %>
+<%- include("../partials/messages") %>
 
-<section class="section-padding">
+<main>
+  <section class="service-detail-header">
+    <div class="container">
+      <a href="/services" class="back-link">
+        <i class="bi bi-arrow-left"></i>
+        Back to services
+      </a>
 
-<div class="container">
+      <div class="row align-items-center g-4 mt-2">
+        <div class="col-lg-8">
+          <div class="detail-title-row">
+            <div class="service-icon detail-service-icon">
+              <i class="bi <%= service.icon %>"></i>
+            </div>
 
-<a href="/services">
+            <div>
+              <p class="section-label mb-2">Professional Service</p>
 
-← Back
+              <h1 class="display-4 fw-bold mb-0">
+                <%= service.title %>
+              </h1>
+            </div>
+          </div>
 
-</a>
+          <p class="lead service-detail-description mt-4">
+            <%= service.description %>
+          </p>
+        </div>
 
-<h1 class="display-4 mt-3">
+        <div class="col-lg-4">
+          <div class="detail-summary">
+            <span>Packages available</span>
 
-<%= service.title %>
+            <strong>
+              <%= service.packages.length %>
+            </strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-</h1>
+  <section class="section-padding package-section">
+    <div class="container">
+      <div class="mb-5">
+        <p class="section-label">Choose a package</p>
 
-<p class="lead">
+        <h2 class="display-6 fw-bold">
+          Select the right level for your project
+        </h2>
+      </div>
 
-<%= service.description %>
+      <div class="row g-4">
+        <% service.packages.forEach((pkg, packageIndex) => { %>
+          <div class="col-md-6 col-lg-4">
+            <article class="package-card">
+              <div>
+                <div class="package-heading">
+                  <div>
+                    <span class="package-label">Package</span>
 
-</p>
+                    <h3 class="h4 fw-bold mb-0">
+                      <%= pkg.name %>
+                    </h3>
+                  </div>
 
-<div class="row mt-5 g-4">
+                  <i class="bi bi-box-seam"></i>
+                </div>
 
-<% service.packages.forEach(pkg=>{ %>
+                <div class="package-price mt-4">
+                  <span>$</span>
+                  <strong><%= pkg.price %></strong>
+                </div>
 
-<div class="col-lg-4">
+                <p class="package-delivery">
+                  <i class="bi bi-clock"></i>
 
-<div class="card h-100">
+                  Delivery in
+                  <strong>
+                    <%= pkg.deliveryDays %>
+                    <%= pkg.deliveryDays === 1 ? "day" : "days" %>
+                  </strong>
+                </p>
 
-<div class="card-body">
+                <hr>
 
-<h3>
+                <p class="fw-bold mb-3">What is included</p>
 
-<%= pkg.name %>
+                <ul class="package-features">
+                  <% pkg.features.forEach((feature) => { %>
+                    <li>
+                      <i class="bi bi-check-lg"></i>
+                      <%= feature %>
+                    </li>
+                  <% }) %>
+                </ul>
+              </div>
 
-</h3>
+              <form action="/cart/add" method="POST" class="mt-4">
+                <input
+                  type="hidden"
+                  name="serviceId"
+                  value="<%= service._id %>"
+                >
 
-<h2 class="text-warning">
+                <input
+                  type="hidden"
+                  name="packageIndex"
+                  value="<%= packageIndex %>"
+                >
 
-$<%= pkg.price %>
-
-</h2>
-
-<p>
-
-Delivery
-
-<%= pkg.deliveryDays %>
-
-days
-
-</p>
-
-<ul>
-
-<% pkg.features.forEach(feature=>{ %>
-
-<li>
-
-<%= feature %>
-
-</li>
-
-<% }) %>
-
-</ul>
-
-<a
-href="#"
-class="btn btn-primary w-100">
-
-Add to Cart
-
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-<% }) %>
-
-</div>
-
-</div>
-
-</section>
+                <button type="submit" class="btn btn-primary w-100">
+                  <i class="bi bi-bag-plus me-2"></i>
+                  Add to Cart
+                </button>
+              </form>
+            </article>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+</main>
 
 <%- include("../partials/footer") %>

@@ -1,0 +1,32 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/navbar") %>
+<%- include("../../partials/messages") %>
+
+<main>
+  <section class="page-header">
+    <div class="container">
+      <p class="section-label">Administration</p>
+
+      <h1 class="display-5 fw-bold mb-2">
+        Create Service
+      </h1>
+
+      <p class="text-secondary mb-0">
+        Add a new professional service to CraftShop.
+      </p>
+    </div>
+  </section>
+
+  <section class="orders-section">
+    <div class="container">
+      <form action="/admin/services" method="POST">
+        <%- include("_form", {
+          service: null,
+          submitLabel: "Create Service"
+        }) %>
+      </form>
+    </div>
+  </section>
+</main>
+
+<%- include("../../partials/footer") %>

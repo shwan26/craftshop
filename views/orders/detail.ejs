@@ -1,0 +1,209 @@
+<%- include("../partials/head") %>
+<%- include("../partials/navbar") %>
+<%- include("../partials/messages") %>
+
+<main>
+  <section class="page-header">
+    <div class="container">
+      <a href="/orders" class="back-link dark-back-link">
+        <i class="bi bi-arrow-left"></i>
+        Back to orders
+      </a>
+
+      <div
+        class="d-flex flex-wrap justify-content-between align-items-end gap-3 mt-4"
+      >
+        <div>
+          <p class="section-label">
+            <%= order.orderNumber %>
+          </p>
+
+          <h1 class="display-5 fw-bold mb-2">
+            Order Details
+          </h1>
+
+          <p class="text-secondary mb-0">
+            Created
+            <%= new Date(order.createdAt).toLocaleString() %>
+          </p>
+        </div>
+
+        <span
+          class="status-badge status-<%= order.status %>"
+        >
+          <%= order.status.replace("-", " ") %>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <section class="orders-section">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <div class="checkout-panel">
+            <p class="section-label">
+              Purchased services
+            </p>
+
+            <h2 class="h4 fw-bold mb-4">
+              Order items
+            </h2>
+
+            <div class="checkout-items">
+              <% order.items.forEach((item) => { %>
+                <article class="checkout-item order-detail-item">
+                  <div>
+                    <a
+                      href="/services/<%= item.serviceSlug %>"
+                      class="cart-service-link"
+                    >
+                      <%= item.serviceTitle %>
+                    </a>
+
+                    <h3 class="h6 fw-bold mb-1 mt-1">
+                      <%= item.packageName %> Package
+                    </h3>
+
+                    <p class="text-secondary small mb-3">
+                      Estimated delivery:
+                      <%= item.deliveryDays %>
+                      <%= item.deliveryDays === 1
+                        ? "day"
+                        : "days" %>
+                    </p>
+
+                    <% if (item.features.length > 0) { %>
+                      <div class="cart-item-features">
+                        <% item.features.forEach((feature) => { %>
+                          <span>
+                            <i class="bi bi-check2"></i>
+                            <%= feature %>
+                          </span>
+                        <% }) %>
+                      </div>
+                    <% } %>
+                  </div>
+
+                  <strong>
+                    $<%= item.price.toFixed(2) %>
+                  </strong>
+                </article>
+              <% }) %>
+            </div>
+          </div>
+
+          <div class="checkout-panel mt-4">
+            <p class="section-label">
+              Project requirements
+            </p>
+
+            <h2 class="h4 fw-bold mb-4">
+              Project brief
+            </h2>
+
+            <p class="project-brief mb-0">
+              <%= order.projectBrief %>
+            </p>
+          </div>
+          <div class="mt-4">
+            <%- include("../partials/order-timeline", {
+              order
+            }) %>
+          </div>
+
+          <div class="mt-4">
+            <%- include("../partials/order-workspace", {
+              order
+            }) %>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <aside class="order-summary">
+            <p class="section-label mb-2">
+              Summary
+            </p>
+
+            <h2 class="h4 fw-bold">
+              Order information
+            </h2>
+
+            <dl class="order-meta mt-4">
+              <div>
+                <dt>Order number</dt>
+                <dd><%= order.orderNumber %></dd>
+              </div>
+
+              <div>
+                <dt>Status</dt>
+                <dd><%= order.status.replace("-", " ") %></dd>
+              </div>
+
+              <% if (order.status === "pending") { %>
+                <form
+                  action="/orders/<%= order._id %>/cancel"
+                  method="POST"
+                  class="mt-4"
+                  onsubmit="return confirm('Are you sure you want to cancel this order?');"
+                >
+                  <label
+                    for="cancellationReason"
+                    class="form-label fw-bold"
+                  >
+                    Cancellation reason
+                  </label>
+
+                  <textarea
+                    id="cancellationReason"
+                    name="cancellationReason"
+                    class="form-control"
+                    rows="3"
+                    maxlength="500"
+                    placeholder="Optional reason for cancelling"
+                  ></textarea>
+
+                  <button
+                    type="submit"
+                    class="btn btn-outline-danger w-100 mt-3"
+                  >
+                    <i class="bi bi-x-circle me-2"></i>
+                    Cancel Order
+                  </button>
+                </form>
+              <% } %>
+
+              <div>
+                <dt>Contact email</dt>
+                <dd><%= order.contactEmail %></dd>
+              </div>
+
+              <div>
+                <dt>Preferred deadline</dt>
+                <dd>
+                  <%= order.preferredDeadline
+                    ? new Date(
+                        order.preferredDeadline
+                      ).toLocaleDateString()
+                    : "Not specified" %>
+                </dd>
+              </div>
+            </dl>
+
+            <hr>
+
+            <div class="summary-total">
+              <span>Total</span>
+
+              <strong>
+                $<%= order.total.toFixed(2) %>
+              </strong>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<%- include("../partials/footer") %>

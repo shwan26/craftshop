@@ -1,0 +1,107 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/navbar") %>
+<%- include("../../partials/messages") %>
+
+<main>
+  <section class="page-header">
+    <div class="container">
+      <p class="section-label">Administration</p>
+
+      <div
+        class="d-flex flex-wrap justify-content-between align-items-end gap-3"
+      >
+        <div>
+          <h1 class="display-5 fw-bold mb-2">
+            Manage Services
+          </h1>
+
+          <p class="text-secondary mb-0">
+            Create, edit, and remove marketplace services.
+          </p>
+        </div>
+
+        <a
+          href="/admin/services/new"
+          class="btn btn-primary"
+        >
+          <i class="bi bi-plus-lg me-2"></i>
+          Create Service
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="orders-section">
+    <div class="container">
+      <% if (services.length === 0) { %>
+        <div class="empty-cart">
+          <h2 class="h3 fw-bold">
+            No services available
+          </h2>
+
+          <a
+            href="/admin/services/new"
+            class="btn btn-primary mt-3"
+          >
+            Create First Service
+          </a>
+        </div>
+      <% } else { %>
+        <div class="admin-service-grid">
+          <% services.forEach((service) => { %>
+            <article class="admin-service-card">
+              <div>
+                <div class="service-icon mb-3">
+                  <i class="bi <%= service.icon %>"></i>
+                </div>
+
+                <p class="section-label mb-1">
+                  <%= service.category %>
+                </p>
+
+                <h2 class="h4 fw-bold">
+                  <%= service.title %>
+                </h2>
+
+                <p class="text-secondary">
+                  <%= service.description %>
+                </p>
+
+                <p class="fw-bold mb-0">
+                  <%= service.packages.length %>
+                  <%= service.packages.length === 1
+                    ? "package"
+                    : "packages" %>
+                </p>
+              </div>
+
+              <div class="admin-card-actions">
+                <a
+                  href="/admin/services/<%= service._id %>/edit"
+                  class="btn btn-outline-dark"
+                >
+                  Edit
+                </a>
+
+                <form
+                  action="/admin/services/<%= service._id %>/delete"
+                  method="POST"
+                  onsubmit="return confirm('Delete this service?');"
+                >
+                  <button
+                    type="submit"
+                    class="btn btn-outline-danger"
+                  >
+                    Delete
+                  </button>
+                </form>
+              </div>
+            </article>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+  </section>
+</main>
+
+<%- include("../../partials/footer") %>

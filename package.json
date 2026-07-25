@@ -8,7 +8,9 @@
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
-    "seed": "node src/seed.js"
+    "seed": "node src/seed.js",
+    "reset-password": "node src/resetPassword.js",
+    "backfill-orders": "node src/backfillOrderHistory.js"
   },
   "keywords": [],
   "author": "",
@@ -32,7 +34,6 @@
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/node": "^26.1.1",
-    "nodemon": "^3.1.14",
-    "typescript": "^7.0.2"
+    "nodemon": "^3.1.14"
   }
 }

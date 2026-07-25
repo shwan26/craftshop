@@ -1,0 +1,86 @@
+<%- include("../partials/head") %>
+<%- include("../partials/navbar") %>
+<%- include("../partials/messages") %>
+
+<main>
+  <section class="success-section">
+    <div class="container">
+      <div class="success-card">
+        <div class="success-icon">
+          <i class="bi bi-check-lg"></i>
+        </div>
+
+        <p class="section-label">
+          Order received
+        </p>
+
+        <h1 class="display-5 fw-bold">
+          Your project is in the queue
+        </h1>
+
+        <p class="lead text-secondary">
+          Your order has been created successfully. You can track
+          its progress from your dashboard.
+        </p>
+
+        <div class="success-order-number">
+          <span>Order number</span>
+
+          <strong>
+            <%= order.orderNumber %>
+          </strong>
+        </div>
+
+        <div class="row g-3 mt-4 text-start">
+          <div class="col-md-4">
+            <div class="success-stat">
+              <span>Status</span>
+
+              <strong>
+                <%= order.status.replace("-", " ") %>
+              </strong>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="success-stat">
+              <span>Services</span>
+
+              <strong>
+                <%= order.items.length %>
+              </strong>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="success-stat">
+              <span>Total</span>
+
+              <strong>
+                $<%= order.total.toFixed(2) %>
+              </strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex flex-wrap justify-content-center gap-3 mt-5">
+          <a
+            href="/orders/<%= order._id %>"
+            class="btn btn-primary"
+          >
+            View Order
+          </a>
+
+          <a
+            href="/dashboard"
+            class="btn btn-outline-dark"
+          >
+            Go to Dashboard
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<%- include("../partials/footer") %>

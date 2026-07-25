@@ -1,0 +1,35 @@
+<%- include("../../partials/head") %>
+<%- include("../../partials/navbar") %>
+<%- include("../../partials/messages") %>
+
+<main>
+  <section class="page-header">
+    <div class="container">
+      <p class="section-label">Administration</p>
+
+      <h1 class="display-5 fw-bold mb-2">
+        Edit Service
+      </h1>
+
+      <p class="text-secondary mb-0">
+        Update <%= service.title %> and its packages.
+      </p>
+    </div>
+  </section>
+
+  <section class="orders-section">
+    <div class="container">
+      <form
+        action="/admin/services/<%= service._id %>"
+        method="POST"
+      >
+        <%- include("_form", {
+          service,
+          submitLabel: "Save Changes"
+        }) %>
+      </form>
+    </div>
+  </section>
+</main>
+
+<%- include("../../partials/footer") %>

@@ -46,17 +46,17 @@ export async function register(req, res) {
     });
 
     req.session.user = {
-
         id: user._id,
-
         name: user.name,
-
+        email: user.email,
         role: user.role
-
     };
 
-    res.redirect("/dashboard");
+    const returnTo = req.session.returnTo || "/dashboard";
 
+    delete req.session.returnTo;
+
+    return res.redirect(returnTo);
 }
 
 export async function login(req, res) {
@@ -87,16 +87,17 @@ export async function login(req, res) {
     }
 
     req.session.user = {
-
         id: user._id,
-
         name: user.name,
-
+        email: user.email,
         role: user.role
-
     };
 
-    res.redirect("/dashboard");
+    const returnTo = req.session.returnTo || "/dashboard";
+
+    delete req.session.returnTo;
+
+    return res.redirect(returnTo);
 
 }
 

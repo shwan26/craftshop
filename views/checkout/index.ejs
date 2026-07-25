@@ -1,0 +1,229 @@
+<%- include("../partials/head") %>
+<%- include("../partials/navbar") %>
+<%- include("../partials/messages") %>
+
+<main>
+  <section class="page-header">
+    <div class="container">
+      <p class="section-label">Final details</p>
+
+      <h1 class="display-5 fw-bold mb-2">
+        Checkout
+      </h1>
+
+      <p class="text-secondary mb-0">
+        Tell us what you need so your project can begin.
+      </p>
+    </div>
+  </section>
+
+  <section class="checkout-section">
+    <div class="container">
+      <form action="/checkout" method="POST">
+        <div class="row g-4">
+          <div class="col-lg-8">
+            <div class="checkout-panel">
+              <div class="checkout-panel-heading">
+                <span>01</span>
+
+                <div>
+                  <p class="section-label mb-1">
+                    Project information
+                  </p>
+
+                  <h2 class="h4 fw-bold mb-0">
+                    Describe your project
+                  </h2>
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <label
+                  for="projectBrief"
+                  class="form-label fw-bold"
+                >
+                  Project brief
+                </label>
+
+                <textarea
+                  id="projectBrief"
+                  name="projectBrief"
+                  class="form-control"
+                  rows="8"
+                  minlength="20"
+                  maxlength="3000"
+                  placeholder="Describe your business, goals, preferred style, required pages, content, dimensions, or any other useful details."
+                  required
+                ></textarea>
+
+                <div class="form-text">
+                  Include goals, references, content requirements,
+                  preferred style, and any technical details.
+                </div>
+              </div>
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label
+                    for="contactEmail"
+                    class="form-label fw-bold"
+                  >
+                    Contact email
+                  </label>
+
+                  <input
+                    id="contactEmail"
+                    type="email"
+                    name="contactEmail"
+                    class="form-control"
+                    value="<%= user.email %>"
+                    required
+                  >
+                </div>
+
+                <div class="col-md-6">
+                  <label
+                    for="preferredDeadline"
+                    class="form-label fw-bold"
+                  >
+                    Preferred deadline
+                  </label>
+
+                  <input
+                    id="preferredDeadline"
+                    type="date"
+                    name="preferredDeadline"
+                    class="form-control"
+                    min="<%= minimumDeadline %>"
+                  >
+
+                  <div class="form-text">
+                    Optional. The package delivery time still applies.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="checkout-panel mt-4">
+              <div class="checkout-panel-heading">
+                <span>02</span>
+
+                <div>
+                  <p class="section-label mb-1">
+                    Selected services
+                  </p>
+
+                  <h2 class="h4 fw-bold mb-0">
+                    Review your order
+                  </h2>
+                </div>
+              </div>
+
+              <div class="checkout-items">
+                <% cart.forEach((item) => { %>
+                  <article class="checkout-item">
+                    <div>
+                      <a
+                        href="/services/<%= item.serviceSlug %>"
+                        class="cart-service-link"
+                      >
+                        <%= item.serviceTitle %>
+                      </a>
+
+                      <h3 class="h6 fw-bold mb-1 mt-1">
+                        <%= item.packageName %> Package
+                      </h3>
+
+                      <p class="text-secondary small mb-0">
+                        Delivery in
+                        <%= item.deliveryDays %>
+                        <%= item.deliveryDays === 1 ? "day" : "days" %>
+                      </p>
+                    </div>
+
+                    <strong>
+                      $<%= Number(item.price).toFixed(2) %>
+                    </strong>
+                  </article>
+                <% }) %>
+              </div>
+
+              <a
+                href="/cart"
+                class="btn btn-outline-dark mt-4"
+              >
+                <i class="bi bi-pencil me-2"></i>
+                Edit Cart
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+            <aside class="order-summary checkout-summary">
+              <p class="section-label mb-2">
+                Order summary
+              </p>
+
+              <h2 class="h4 fw-bold">
+                Confirm project
+              </h2>
+
+              <div class="summary-lines mt-4">
+                <% cart.forEach((item) => { %>
+                  <div class="summary-line">
+                    <span>
+                      <%= item.serviceTitle %>
+
+                      <small>
+                        <%= item.packageName %>
+                      </small>
+                    </span>
+
+                    <strong>
+                      $<%= Number(item.price).toFixed(2) %>
+                    </strong>
+                  </div>
+                <% }) %>
+              </div>
+
+              <hr>
+
+              <div class="summary-total">
+                <span>Total</span>
+
+                <strong>
+                  $<%= total.toFixed(2) %>
+                </strong>
+              </div>
+
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg w-100 mt-4"
+              >
+                Place Order
+                <i class="bi bi-arrow-right ms-2"></i>
+              </button>
+
+              <p class="summary-notice">
+                No payment will be collected during this MVP
+                checkout. Your order will be created with a
+                pending status.
+              </p>
+
+              <div class="summary-security">
+                <i class="bi bi-shield-check"></i>
+
+                <span>
+                  Prices are verified by the server before your
+                  order is created.
+                </span>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<%- include("../partials/footer") %>

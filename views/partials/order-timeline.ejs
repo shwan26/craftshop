@@ -1,0 +1,68 @@
+<section class="order-timeline">
+  <div class="workspace-heading">
+    <div>
+      <p class="section-label mb-1">
+        Project progress
+      </p>
+
+      <h2 class="h4 fw-bold mb-0">
+        Status Timeline
+      </h2>
+    </div>
+  </div>
+
+  <% if (!order.statusHistory?.length) { %>
+    <div class="workspace-empty">
+      <i class="bi bi-clock-history"></i>
+
+      <p class="mb-0">
+        No progress updates are available yet.
+      </p>
+    </div>
+  <% } else { %>
+    <div class="timeline-list">
+      <% order.statusHistory.forEach((entry, index) => { %>
+        <article class="timeline-entry">
+          <div class="timeline-marker">
+            <span></span>
+
+            <% if (
+              index < order.statusHistory.length - 1
+            ) { %>
+              <div class="timeline-line"></div>
+            <% } %>
+          </div>
+
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <span
+                class="status-badge status-<%= entry.status %>"
+              >
+                <%= entry.status.replace("-", " ") %>
+              </span>
+
+              <time>
+                <%= new Date(
+                  entry.createdAt
+                ).toLocaleString() %>
+              </time>
+            </div>
+
+            <p class="timeline-author">
+              Updated by
+              <strong>
+                <%= entry.changedByName || "System" %>
+              </strong>
+            </p>
+
+            <% if (entry.note) { %>
+              <p class="timeline-note">
+                <%= entry.note %>
+              </p>
+            <% } %>
+          </div>
+        </article>
+      <% }) %>
+    </div>
+  <% } %>
+</section>

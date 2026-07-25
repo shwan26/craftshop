@@ -1,0 +1,108 @@
+<section class="order-workspace" id="messages">
+  <div class="workspace-heading">
+    <div>
+      <p class="section-label mb-1">
+        Project communication
+      </p>
+
+      <h2 class="h4 fw-bold mb-0">
+        Messages
+      </h2>
+    </div>
+
+    <span class="workspace-message-count">
+      <%= order.messages?.length || 0 %>
+      <%= order.messages?.length === 1
+        ? "message"
+        : "messages" %>
+    </span>
+  </div>
+
+  <% if (!order.messages?.length) { %>
+    <div class="workspace-empty">
+      <i class="bi bi-chat-square-text"></i>
+
+      <p class="mb-0">
+        No messages yet. Start the conversation about this
+        project.
+      </p>
+    </div>
+  <% } else { %>
+    <div class="workspace-messages">
+      <% order.messages.forEach((message) => { %>
+        <% const isOwnMessage =
+          String(message.sender?._id || message.sender) ===
+          String(currentUser.id); %>
+
+        <article
+          class="workspace-message
+            <%= isOwnMessage ? "workspace-message-own" : "" %>
+            <%= message.senderRole === "admin"
+              ? "workspace-message-admin"
+              : "" %>"
+        >
+          <div class="workspace-message-header">
+            <div>
+              <strong>
+                <%= message.senderName %>
+              </strong>
+
+              <% if (message.senderRole === "admin") { %>
+                <span class="workspace-role-badge">
+                  CraftShop
+                </span>
+              <% } %>
+            </div>
+
+            <time>
+              <%= new Date(
+                message.createdAt
+              ).toLocaleString() %>
+            </time>
+          </div>
+
+          <p class="workspace-message-body">
+            <%= message.body %>
+          </p>
+        </article>
+      <% }) %>
+    </div>
+  <% } %>
+
+  <form
+    action="/orders/<%= order._id %>/messages"
+    method="POST"
+    class="workspace-message-form"
+  >
+    <label
+      for="message"
+      class="form-label fw-bold"
+    >
+      Send a message
+    </label>
+
+    <textarea
+      id="message"
+      name="message"
+      class="form-control"
+      rows="5"
+      maxlength="2000"
+      placeholder="Write a project question, update, or clarification..."
+      required
+    ></textarea>
+
+    <div class="workspace-form-footer">
+      <small class="text-secondary">
+        Maximum 2,000 characters
+      </small>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+      >
+        <i class="bi bi-send me-2"></i>
+        Send Message
+      </button>
+    </div>
+  </form>
+</section>

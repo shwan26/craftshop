@@ -1,0 +1,214 @@
+<%- include("../partials/head") %>
+<%- include("../partials/navbar") %>
+<%- include("../partials/messages") %>
+
+<main>
+  <section class="page-header">
+    <div class="container">
+      <p class="section-label">Your selection</p>
+
+      <div
+        class="d-flex flex-wrap justify-content-between align-items-end gap-3"
+      >
+        <div>
+          <h1 class="display-5 fw-bold mb-2">
+            Shopping Cart
+          </h1>
+
+          <p class="text-secondary mb-0">
+            Review your selected services before checkout.
+          </p>
+        </div>
+
+        <% if (cart.length > 0) { %>
+          <span class="cart-count-label">
+            <%= cart.length %>
+            <%= cart.length === 1 ? "item" : "items" %>
+          </span>
+        <% } %>
+      </div>
+    </div>
+  </section>
+
+  <section class="cart-section">
+    <div class="container">
+      <% if (cart.length === 0) { %>
+        <div class="empty-cart">
+          <div class="empty-cart-icon">
+            <i class="bi bi-bag"></i>
+          </div>
+
+          <h2 class="h3 fw-bold">
+            Your cart is empty
+          </h2>
+
+          <p class="text-secondary">
+            Browse CraftShop services and add a package to begin
+            your project.
+          </p>
+
+          <a href="/services" class="btn btn-primary">
+            Browse Services
+          </a>
+        </div>
+      <% } else { %>
+        <div class="row g-4">
+          <div class="col-lg-8">
+            <div class="cart-items">
+              <% cart.forEach((item) => { %>
+                <article class="cart-item">
+                  <div class="cart-item-main">
+                    <div class="cart-item-icon">
+                      <i class="bi <%= item.serviceIcon %>"></i>
+                    </div>
+
+                    <div class="cart-item-details">
+                      <a
+                        href="/services/<%= item.serviceSlug %>"
+                        class="cart-service-link"
+                      >
+                        <%= item.serviceTitle %>
+                      </a>
+
+                      <h2 class="h5 fw-bold mt-1 mb-2">
+                        <%= item.packageName %> Package
+                      </h2>
+
+                      <p class="cart-delivery mb-0">
+                        <i class="bi bi-clock"></i>
+
+                        Estimated delivery:
+                        <strong>
+                          <%= item.deliveryDays %>
+                          <%= item.deliveryDays === 1 ? "day" : "days" %>
+                        </strong>
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="cart-item-actions">
+                    <strong class="cart-item-price">
+                      $<%= item.price.toFixed(2) %>
+                    </strong>
+
+                    <form
+                      action="/cart/remove/<%= item.id %>"
+                      method="POST"
+                    >
+                      <button
+                        type="submit"
+                        class="btn btn-sm btn-outline-danger"
+                        aria-label="Remove <%= item.serviceTitle %> from cart"
+                      >
+                        <i class="bi bi-trash"></i>
+                        Remove
+                      </button>
+                    </form>
+                  </div>
+
+                  <% if (item.features?.length > 0) { %>
+                    <div class="cart-item-features">
+                      <% item.features.forEach((feature) => { %>
+                        <span>
+                          <i class="bi bi-check2"></i>
+                          <%= feature %>
+                        </span>
+                      <% }) %>
+                    </div>
+                  <% } %>
+                </article>
+              <% }) %>
+            </div>
+
+            <div
+              class="d-flex flex-wrap justify-content-between gap-3 mt-4"
+            >
+              <a href="/services" class="btn btn-outline-dark">
+                <i class="bi bi-arrow-left me-2"></i>
+                Continue Shopping
+              </a>
+
+              <form action="/cart/clear" method="POST">
+                <button type="submit" class="btn btn-link text-danger">
+                  Clear Cart
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+            <aside class="order-summary">
+              <p class="section-label mb-2">
+                Order summary
+              </p>
+
+              <h2 class="h4 fw-bold">
+                Project total
+              </h2>
+
+              <div class="summary-lines mt-4">
+                <% cart.forEach((item) => { %>
+                  <div class="summary-line">
+                    <span>
+                      <%= item.serviceTitle %>
+                      <small>
+                        <%= item.packageName %>
+                      </small>
+                    </span>
+
+                    <strong>
+                      $<%= item.price.toFixed(2) %>
+                    </strong>
+                  </div>
+                <% }) %>
+              </div>
+
+              <hr>
+
+              <div class="summary-total">
+                <span>Total</span>
+
+                <strong>
+                  $<%= total.toFixed(2) %>
+                </strong>
+              </div>
+
+              <% if (currentUser) { %>
+                <a
+                  href="/checkout"
+                  class="btn btn-primary btn-lg w-100 mt-4"
+                >
+                  Continue to Checkout
+                  <i class="bi bi-arrow-right ms-2"></i>
+                </a>
+              <% } else { %>
+                <a
+                  href="/login?returnTo=/checkout"
+                  class="btn btn-primary btn-lg w-100 mt-4"
+                >
+                  Login to Checkout
+                  <i class="bi bi-arrow-right ms-2"></i>
+                </a>
+
+                <p class="summary-notice">
+                  You can browse and build your cart without an
+                  account. Login is required to place an order.
+                </p>
+              <% } %>
+
+              <div class="summary-security">
+                <i class="bi bi-shield-check"></i>
+
+                <span>
+                  Your order details are stored securely.
+                </span>
+              </div>
+            </aside>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  </section>
+</main>
+
+<%- include("../partials/footer") %>

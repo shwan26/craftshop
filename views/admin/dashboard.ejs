@@ -5,24 +5,56 @@
 <main>
   <section class="dashboard-header">
     <div class="container">
-      <p class="section-label">
-        Customer dashboard
-      </p>
+      <p class="section-label">Administration</p>
 
       <h1 class="display-5 fw-bold">
-        Welcome, <%= currentUser.name %>
+        CraftShop Command Center
       </h1>
 
       <p class="dashboard-intro mb-0">
-        Review your projects, track progress, and start new work.
+        Manage customers, services, and active projects.
       </p>
     </div>
   </section>
 
   <section class="dashboard-section">
     <div class="container">
+      <div class="admin-actions mb-4">
+        <a
+          href="/admin/orders"
+          class="btn btn-primary"
+        >
+          <i class="bi bi-receipt me-2"></i>
+          Manage Orders
+        </a>
+
+        <a
+          href="/admin/services"
+          class="btn btn-outline-dark"
+        >
+          <i class="bi bi-grid me-2"></i>
+          Manage Services
+        </a>
+      </div>
+
       <div class="row g-4">
-        <div class="col-md-4">
+        <div class="col-md-6 col-xl-3">
+          <article class="dashboard-stat">
+            <span>Users</span>
+            <strong><%= userCount %></strong>
+            <i class="bi bi-people"></i>
+          </article>
+        </div>
+
+        <div class="col-md-6 col-xl-3">
+          <article class="dashboard-stat">
+            <span>Services</span>
+            <strong><%= serviceCount %></strong>
+            <i class="bi bi-grid"></i>
+          </article>
+        </div>
+
+        <div class="col-md-6 col-xl-3">
           <article class="dashboard-stat">
             <span>Total orders</span>
             <strong><%= orderCount %></strong>
@@ -30,19 +62,11 @@
           </article>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-6 col-xl-3">
           <article class="dashboard-stat">
-            <span>Active projects</span>
-            <strong><%= activeOrderCount %></strong>
+            <span>Active orders</span>
+            <strong><%= pendingOrderCount %></strong>
             <i class="bi bi-tools"></i>
-          </article>
-        </div>
-
-        <div class="col-md-4">
-          <article class="dashboard-stat">
-            <span>Delivered</span>
-            <strong><%= completedOrderCount %></strong>
-            <i class="bi bi-check2-square"></i>
           </article>
         </div>
       </div>
@@ -53,7 +77,7 @@
         >
           <div>
             <p class="section-label mb-1">
-              Recent activity
+              Latest activity
             </p>
 
             <h2 class="h3 fw-bold mb-0">
@@ -62,30 +86,24 @@
           </div>
 
           <a
-            href="/orders"
+            href="/admin/orders"
             class="btn btn-outline-dark"
           >
-            View All Orders
+            View All
           </a>
         </div>
 
-        <% if (orders.length === 0) { %>
-          <div class="dashboard-empty">
-            <p class="text-secondary">
-              You have not placed an order yet.
-            </p>
-
-            <a href="/services" class="btn btn-primary">
-              Browse Services
-            </a>
-          </div>
+        <% if (recentOrders.length === 0) { %>
+          <p class="text-secondary mt-4 mb-0">
+            No orders have been placed yet.
+          </p>
         <% } else { %>
           <div class="table-responsive mt-4">
             <table class="table align-middle dashboard-table">
               <thead>
                 <tr>
                   <th>Order</th>
-                  <th>Services</th>
+                  <th>Customer</th>
                   <th>Status</th>
                   <th>Total</th>
                   <th></th>
@@ -93,12 +111,10 @@
               </thead>
 
               <tbody>
-                <% orders.forEach((order) => { %>
+                <% recentOrders.forEach((order) => { %>
                   <tr>
                     <td>
-                      <strong>
-                        <%= order.orderNumber %>
-                      </strong>
+                      <strong><%= order.orderNumber %></strong>
 
                       <small>
                         <%= new Date(
@@ -108,10 +124,11 @@
                     </td>
 
                     <td>
-                      <%= order.items.length %>
-                      <%= order.items.length === 1
-                        ? "service"
-                        : "services" %>
+                      <%= order.user?.name || "Unknown" %>
+
+                      <small>
+                        <%= order.user?.email || "" %>
+                      </small>
                     </td>
 
                     <td>
@@ -123,17 +140,15 @@
                     </td>
 
                     <td>
-                      <strong>
-                        $<%= order.total.toFixed(2) %>
-                      </strong>
+                      $<%= Number(order.total).toFixed(2) %>
                     </td>
 
                     <td class="text-end">
                       <a
-                        href="/orders/<%= order._id %>"
+                        href="/admin/orders/<%= order._id %>"
                         class="btn btn-sm btn-outline-dark"
                       >
-                        View
+                        Open
                       </a>
                     </td>
                   </tr>

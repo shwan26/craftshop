@@ -1,0 +1,286 @@
+<div class="checkout-panel">
+  <div class="mb-4">
+    <label for="title" class="form-label fw-bold">
+      Service title
+    </label>
+
+    <input
+      id="title"
+      type="text"
+      name="title"
+      class="form-control"
+      value="<%= service?.title || "" %>"
+      required
+    >
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-6">
+      <label for="category" class="form-label fw-bold">
+        Category
+      </label>
+
+      <input
+        id="category"
+        type="text"
+        name="category"
+        class="form-control"
+        value="<%= service?.category || "" %>"
+        required
+      >
+    </div>
+
+    <div class="col-md-6">
+      <label for="icon" class="form-label fw-bold">
+        Bootstrap icon class
+      </label>
+
+      <input
+        id="icon"
+        type="text"
+        name="icon"
+        class="form-control"
+        value="<%= service?.icon || "bi-tools" %>"
+        placeholder="bi-code-slash"
+      >
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <label for="description" class="form-label fw-bold">
+      Description
+    </label>
+
+    <textarea
+      id="description"
+      name="description"
+      class="form-control"
+      rows="5"
+      required
+    ><%= service?.description || "" %></textarea>
+  </div>
+</div>
+
+<div class="checkout-panel mt-4">
+  <p class="section-label">Pricing</p>
+
+  <div
+    class="d-flex justify-content-between align-items-center gap-3"
+  >
+    <h2 class="h4 fw-bold mb-0">
+      Service packages
+    </h2>
+
+    <button
+      type="button"
+      id="addPackageButton"
+      class="btn btn-sm btn-outline-dark"
+    >
+      Add Package
+    </button>
+  </div>
+
+  <div id="packagesContainer" class="mt-4">
+    <% const packages =
+      service?.packages?.length
+        ? service.packages
+        : [
+            {
+              name: "",
+              price: "",
+              deliveryDays: "",
+              features: []
+            }
+          ]; %>
+
+    <% packages.forEach((pkg) => { %>
+      <div class="admin-package-form">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label fw-bold">
+              Package name
+            </label>
+
+            <input
+              type="text"
+              name="packageName"
+              class="form-control"
+              value="<%= pkg.name %>"
+              required
+            >
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label fw-bold">
+              Price
+            </label>
+
+            <input
+              type="number"
+              name="packagePrice"
+              class="form-control"
+              min="0"
+              step="0.01"
+              value="<%= pkg.price %>"
+              required
+            >
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label fw-bold">
+              Delivery days
+            </label>
+
+            <input
+              type="number"
+              name="packageDeliveryDays"
+              class="form-control"
+              min="1"
+              step="1"
+              value="<%= pkg.deliveryDays %>"
+              required
+            >
+          </div>
+
+          <div class="col-12">
+            <label class="form-label fw-bold">
+              Features
+            </label>
+
+            <textarea
+              name="packageFeatures"
+              class="form-control"
+              rows="4"
+              placeholder="One feature per line"
+            ><%= pkg.features?.join("\n") || "" %></textarea>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-sm btn-outline-danger remove-package-button mt-3"
+        >
+          Remove Package
+        </button>
+      </div>
+    <% }) %>
+  </div>
+</div>
+
+<div class="d-flex flex-wrap gap-3 mt-4">
+  <button type="submit" class="btn btn-primary">
+    <%= submitLabel %>
+  </button>
+
+  <a
+    href="/admin/services"
+    class="btn btn-outline-dark"
+  >
+    Cancel
+  </a>
+</div>
+
+<script>
+  const packagesContainer =
+    document.getElementById("packagesContainer");
+
+  const addPackageButton =
+    document.getElementById("addPackageButton");
+
+  function connectRemoveButtons() {
+    document
+      .querySelectorAll(".remove-package-button")
+      .forEach((button) => {
+        button.onclick = () => {
+          const packageForms =
+            document.querySelectorAll(".admin-package-form");
+
+          if (packageForms.length <= 1) {
+            alert("A service must have at least one package.");
+            return;
+          }
+
+          button.closest(".admin-package-form").remove();
+        };
+      });
+  }
+
+  addPackageButton.addEventListener("click", () => {
+    const packageForm = document.createElement("div");
+
+    packageForm.className = "admin-package-form";
+
+    packageForm.innerHTML = `
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label fw-bold">
+            Package name
+          </label>
+
+          <input
+            type="text"
+            name="packageName"
+            class="form-control"
+            required
+          >
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label fw-bold">
+            Price
+          </label>
+
+          <input
+            type="number"
+            name="packagePrice"
+            class="form-control"
+            min="0"
+            step="0.01"
+            required
+          >
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label fw-bold">
+            Delivery days
+          </label>
+
+          <input
+            type="number"
+            name="packageDeliveryDays"
+            class="form-control"
+            min="1"
+            step="1"
+            required
+          >
+        </div>
+
+        <div class="col-12">
+          <label class="form-label fw-bold">
+            Features
+          </label>
+
+          <textarea
+            name="packageFeatures"
+            class="form-control"
+            rows="4"
+            placeholder="One feature per line"
+          ></textarea>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-sm btn-outline-danger remove-package-button mt-3"
+      >
+        Remove Package
+      </button>
+    `;
+
+    packagesContainer.appendChild(packageForm);
+
+    connectRemoveButtons();
+  });
+
+  connectRemoveButtons();
+</script>
