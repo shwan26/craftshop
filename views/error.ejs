@@ -1,23 +1,37 @@
-<%- include("partials/head") %>
-<%- include("partials/navbar") %>
+<%- include("partials/header", { title }) %>
 
-<main class="error-page">
-  <div class="container text-center">
-    <div class="error-icon">
-      <i class="bi bi-exclamation-triangle"></i>
+<main class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+      <section class="text-center py-5">
+        <p class="section-label">
+          Application error
+        </p>
+
+        <h1 class="display-5 fw-bold">
+          Something went wrong
+        </h1>
+
+        <p class="text-secondary mt-3">
+          We could not complete your request. Please return
+          to the home page and try again.
+        </p>
+
+        <% if (errorId) { %>
+          <p class="small text-secondary">
+            Reference:
+            <code><%= errorId %></code>
+          </p>
+        <% } %>
+
+        <a
+          href="/"
+          class="btn btn-primary mt-3"
+        >
+          Return Home
+        </a>
+      </section>
     </div>
-
-    <h1 class="display-6 fw-bold">
-      Something went wrong
-    </h1>
-
-    <p class="text-secondary">
-      <%= message %>
-    </p>
-
-    <a href="/" class="btn btn-primary">
-      Return Home
-    </a>
   </div>
 </main>
 

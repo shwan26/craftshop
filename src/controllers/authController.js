@@ -2,111 +2,142 @@ import bcrypt from "bcrypt";
 import User from "../models/User.js";
 
 export function showLogin(req, res) {
-
-    res.render("auth/login", {
-        title: "Login"
-    });
-
+  return res.render("auth/login", {
+    title: "Login"
+  });
 }
 
 export function showRegister(req, res) {
-
-    res.render("auth/register", {
-        title: "Register"
-    });
-
+  return res.render("auth/register", {
+    title: "Register"
+  });
 }
 
-export async function register(req, res) {
+export async function register(req, res, next) {
+  try {
+    const name = String(req.body.name || "").trim();
 
-    const {
-        name,
-        email,
-        password
-    } = req.body;
+    const email = String(req.body.email || "")
+      .trim()
+      .toLowerCase();
 
-    const exists = await User.findOne({ email });
+    const password = String(req.body.password || "");
 
-    if (exists) {
-
-        req.flash("error", "Email already exists.");
-
-        return res.redirect("/register");
-
+    if (!name || !email || !password) {
+      req.flash("error", "All fields are required.");
+      return res.redirect("/register");
     }
 
-    const hash = await bcrypt.hash(password, 10);
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      req.flash("error", "Email already exists.");
+      return res.redirect("/register");
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await User.create({
-
-        name,
-        email,
-        password: hash
-
+      name,
+      email,
+      password: hashedPassword
     });
-
-    req.session.user = {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role
-    };
 
     const returnTo = req.session.returnTo || "/dashboard";
 
-    delete req.session.returnTo;
+    req.session.regenerate((regenerateError) => {
+      if (regenerateError) {
+        return next(regenerateError);
+      }
 
-    return res.redirect(returnTo);
+      req.session.user = {
+        id: user._id.toString(),
+        name: user.name,
+        email: user.email,
+        role: user.role
+      };
+
+      req.session.save((saveError) => {
+        if (saveError) {
+          return next(saveError);
+        }
+
+        return res.redirect(
+          user.role === "admin"
+            ? "/admin"
+            : returnTo
+        );
+      });
+    });
+  } catch (error) {
+    return next(error);
+  }
 }
 
-export async function login(req, res) {
+export async function login(req, res, next) {
+  try {
+    const email = String(req.body.email || "")
+      .trim()
+      .toLowerCase();
 
-    const {
-        email,
-        password
-    } = req.body;
+    const password = String(req.body.password || "");
 
     const user = await User.findOne({ email });
 
     if (!user) {
-
-        req.flash("error", "Invalid credentials.");
-
-        return res.redirect("/login");
-
+      req.flash("error", "Invalid email or password.");
+      return res.redirect("/login");
     }
 
-    const valid = await bcrypt.compare(password, user.password);
+    const passwordMatches = await bcrypt.compare(
+      password,
+      user.password
+    );
 
-    if (!valid) {
-
-        req.flash("error", "Invalid credentials.");
-
-        return res.redirect("/login");
-
+    if (!passwordMatches) {
+      req.flash("error", "Invalid email or password.");
+      return res.redirect("/login");
     }
-
-    req.session.user = {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role
-    };
 
     const returnTo = req.session.returnTo || "/dashboard";
 
-    delete req.session.returnTo;
+    req.session.regenerate((regenerateError) => {
+      if (regenerateError) {
+        return next(regenerateError);
+      }
 
-    return res.redirect(returnTo);
+      req.session.user = {
+        id: user._id.toString(),
+        name: user.name,
+        email: user.email,
+        role: user.role
+      };
 
+      req.session.save((saveError) => {
+        if (saveError) {
+          return next(saveError);
+        }
+
+        return res.redirect(
+          user.role === "admin"
+            ? "/admin"
+            : returnTo
+        );
+      });
+    });
+  } catch (error) {
+    return next(error);
+  }
 }
 
-export function logout(req, res) {
+export function logout(req, res, next) {
+  req.session.destroy((error) => {
+    if (error) {
+      return next(error);
+    }
 
-    req.session.destroy(() => {
+    res.clearCookie("craftshop.sid");
 
-        res.redirect("/");
-
-    });
-
+    return res.redirect("/");
+  });
 }

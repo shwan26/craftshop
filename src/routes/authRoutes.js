@@ -10,15 +10,19 @@ logout
 
 } from "../controllers/authController.js";
 
+import {
+  authenticationLimiter
+} from "../middleware/rateLimits.js";
+
 const router = express.Router();
 
 router.get("/login", showLogin);
 
-router.post("/login", login);
+router.post("/login", authenticationLimiter, login);
 
 router.get("/register", showRegister);
 
-router.post("/register", register);
+router.post("/register", authenticationLimiter, register);
 
 router.post("/logout", logout);
 

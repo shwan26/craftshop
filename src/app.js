@@ -7,6 +7,12 @@ import flash from "connect-flash";
 import path from "path";
 import { fileURLToPath } from "url";
 
+import { env } from "./config/env.js";
+
+import { generalLimiter } from "./middleware/rateLimits.js";
+
+import { normalizeInput } from "./middleware/normalizeInput.js";
+
 import homeRoutes from "./routes/homeRoutes.js";
 import serviceRoutes from "./routes/serviceRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
@@ -19,6 +25,13 @@ import workspaceRoutes from "./routes/workspaceRoutes.js";
 
 const app = express();
 
+const isProduction =
+  env.NODE_ENV === "production";
+
+if (isProduction) {
+  app.set("trust proxy", 1);
+}
+
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 const projectRoot = path.resolve(dirname, "..");
@@ -28,14 +41,68 @@ app.set("views", path.join(projectRoot, "views"));
 
 app.use(
   helmet({
-    contentSecurityPolicy: false
+    contentSecurityPolicy: {
+      directives: {
+        "default-src": ["'self'"],
+
+        "script-src": [
+          "'self'",
+          "https://cdn.jsdelivr.net"
+        ],
+
+        "style-src": [
+          "'self'",
+          "'unsafe-inline'",
+          "https://cdn.jsdelivr.net",
+          "https://fonts.googleapis.com"
+        ],
+
+        "font-src": [
+          "'self'",
+          "https://cdn.jsdelivr.net",
+          "https://fonts.gstatic.com",
+          "data:"
+        ],
+
+        "img-src": [
+          "'self'",
+          "data:",
+          "https:"
+        ],
+
+        "connect-src": ["'self'"],
+
+        "object-src": ["'none'"],
+
+        "base-uri": ["'self'"],
+
+        "form-action": ["'self'"],
+
+        "frame-ancestors": ["'none'"]
+      }
+    }
   })
 );
 
 app.use(compression());
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(
+  express.urlencoded({
+    extended: true,
+    limit: "100kb",
+    parameterLimit: 100
+  })
+);
+
+app.use(
+  express.json({
+    limit: "100kb"
+  })
+);
+
+app.use(normalizeInput);
+
+app.use(generalLimiter);
 
 app.use(express.static(path.join(projectRoot, "public")));
 
@@ -44,17 +111,27 @@ app.set("trust proxy", 1);
 app.use(
   session({
     name: "craftshop.sid",
-    secret: process.env.SESSION_SECRET,
+
+    secret: env.SESSION_SECRET,
+
     resave: false,
+
     saveUninitialized: false,
+
+    rolling: true,
+
     store: MongoStore.create({
-      mongoUrl: process.env.MONGODB_URI
+      mongoUrl: env.MONGODB_URI,
+      dbName: "craftshop",
+      collectionName: "sessions",
+      ttl: 7 * 24 * 60 * 60
     }),
+
     cookie: {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: isProduction,
       sameSite: "lax",
-      maxAge: 1000 * 60 * 60 * 24 * 7
+      maxAge: 7 * 24 * 60 * 60 * 1000
     }
   })
 );
@@ -80,9 +157,37 @@ app.use("/orders", orderRoutes);
 app.use("/admin", adminRoutes);
 app.use("/", workspaceRoutes);
 
-app.use((req, res) => {
-  res.status(404).render("404", {
-    title: "Page Not Found"
+app.use((error, req, res, next) => {
+  const errorId =
+    `${Date.now()}-${Math.random()
+      .toString(36)
+      .slice(2, 8)}`;
+
+  console.error(`[${errorId}]`, error);
+
+  if (res.headersSent) {
+    return next(error);
+  }
+
+  const statusCode =
+    Number.isInteger(error.status)
+      ? error.status
+      : 500;
+
+  if (env.NODE_ENV === "development") {
+    return res.status(statusCode).render("error", {
+      title: "Application Error",
+      errorId,
+      errorMessage: error.message,
+      errorStack: error.stack
+    });
+  }
+
+  return res.status(statusCode).render("error", {
+    title: "Something Went Wrong",
+    errorId,
+    errorMessage: null,
+    errorStack: null
   });
 });
 

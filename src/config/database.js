@@ -1,13 +1,26 @@
 import mongoose from "mongoose";
 
+import { env } from "./env.js";
+
 export async function connectDatabase() {
-  const mongodbUri = process.env.MONGODB_URI;
+  try {
+    await mongoose.connect(env.MONGODB_URI, {
+      dbName: "craftshop"
+    });
 
-  if (!mongodbUri) {
-    throw new Error("MONGODB_URI is missing from the .env file.");
+    console.log(
+      `MongoDB connected: ${mongoose.connection.host}`
+    );
+
+    console.log(
+      `MongoDB database: ${mongoose.connection.name}`
+    );
+  } catch (error) {
+    console.error(
+      "MongoDB connection failed:",
+      error.message
+    );
+
+    throw error;
   }
-
-  await mongoose.connect(mongodbUri);
-
-  console.log(`MongoDB connected: ${mongoose.connection.host}`);
 }
