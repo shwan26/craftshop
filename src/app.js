@@ -186,10 +186,22 @@ app.use((error, req, res, next) => {
   }
 
   return res.status(statusCode).render("error", {
-    title: "Something Went Wrong",
+    title:
+      env.NODE_ENV === "production"
+        ? "Something Went Wrong"
+        : "Application Error",
+
     errorId,
-    errorMessage: null,
-    errorStack: null
+
+    errorMessage:
+      env.NODE_ENV === "development"
+        ? error.message
+        : null,
+
+    errorStack:
+      env.NODE_ENV === "development"
+        ? error.stack
+        : null
   });
 });
 
