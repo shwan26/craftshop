@@ -8,7 +8,7 @@ Built as a portfolio project using Node.js, Express, MongoDB Atlas, and EJS, the
 
 ## Live Demo
 
-**Website:** https://your-app.onrender.com
+**Website:** https://craftshop-pbe8.onrender.com/
 
 ---
 
@@ -118,7 +118,7 @@ craftshop/
 ### Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/craftshop.git
+git clone https://github.com/shwan26/craftshop.git
 
 cd craftshop
 ```
@@ -274,6 +274,6 @@ This project was created for educational and portfolio purposes.
 
 **Your Name**
 
-GitHub: https://github.com/yourusername
+GitHub: https://github.com/shwan26
 
-LinkedIn: https://linkedin.com/in/yourusername
+LinkedIn: https://linkedin.com/in/shwan-myat-nay-chi
