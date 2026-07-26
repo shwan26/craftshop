@@ -6,6 +6,10 @@ import { requireLogin } from "../middleware/auth.js";
 const router = express.Router();
 
 router.get("/", requireLogin, async (req, res, next) => {
+  if (req.session.user.role === "admin") {
+    return res.redirect("/admin");
+  }
+
   try {
     const orders = await Order.find({
       user: req.session.user.id
