@@ -39,6 +39,8 @@ const projectRoot = path.resolve(dirname, "..");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(projectRoot, "views"));
+app.locals.googleAnalyticsId =
+  env.GOOGLE_ANALYTICS_ID ?? null;
 
 app.use(
   helmet({
@@ -48,7 +50,8 @@ app.use(
 
         "script-src": [
           "'self'",
-          "https://cdn.jsdelivr.net"
+          "https://cdn.jsdelivr.net",
+          "https://www.googletagmanager.com"
         ],
 
         "style-src": [
@@ -71,7 +74,12 @@ app.use(
           "https:"
         ],
 
-        "connect-src": ["'self'"],
+        "connect-src": [
+          "'self'",
+          "https://*.google-analytics.com",
+          "https://*.analytics.google.com",
+          "https://www.googletagmanager.com"
+        ],
 
         "object-src": ["'none'"],
 

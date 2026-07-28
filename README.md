@@ -141,6 +141,8 @@ PORT=3000
 MONGODB_URI=your_mongodb_connection_string
 
 SESSION_SECRET=your_long_random_secret
+
+GOOGLE_ANALYTICS_ID=G-XXXXXXXXXX
 ```
 
 ### Run the application
@@ -173,6 +175,7 @@ http://localhost:3000
 | PORT | Server port |
 | MONGODB_URI | MongoDB Atlas connection string |
 | SESSION_SECRET | Secret used to sign sessions |
+| GOOGLE_ANALYTICS_ID | Optional GA4 measurement ID |
 
 ---
 

@@ -20,7 +20,16 @@ const envSchema = z.object({
     .min(
       32,
       "SESSION_SECRET must contain at least 32 characters"
+    ),
+
+  GOOGLE_ANALYTICS_ID: z
+    .string()
+    .trim()
+    .regex(
+      /^G-[A-Z0-9]+$/,
+      "GOOGLE_ANALYTICS_ID must be a valid GA4 measurement ID"
     )
+    .optional()
 });
 
 const parsedEnvironment =
