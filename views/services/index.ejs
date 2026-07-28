@@ -1,58 +1,47 @@
 <%- include("../partials/head") %>
 <%- include("../partials/navbar") %>
 
-<section class="section-padding">
+<main>
+  <header class="page-header">
+    <div class="container">
+      <p class="section-label">Service catalog</p>
+      <h1 class="display-5 fw-bold mb-2">Choose your craft.</h1>
+      <p class="text-secondary mb-0">
+        Focused digital services, clearly scoped and ready to start.
+      </p>
+    </div>
+  </header>
 
-<div class="container">
+  <section class="section-padding">
+    <div class="container">
+      <div class="row g-4">
+        <% services.forEach((service) => { %>
+          <div class="col-md-6 col-lg-4">
+            <article class="service-card h-100">
+              <div class="service-icon">
+                <i class="bi <%= service.icon %>"></i>
+              </div>
 
-<h1 class="display-5 fw-bold mb-5">
-Services
-</h1>
+              <h2 class="h3 mt-4">
+                <%= service.title %>
+              </h2>
 
-<div class="row g-4">
+              <p class="text-secondary">
+                <%= service.description %>
+              </p>
 
-<% services.forEach(service=>{ %>
-
-<div class="col-lg-4">
-
-<div class="service-card h-100">
-
-<div class="service-icon">
-
-<i class="bi <%= service.icon %>"></i>
-
-</div>
-
-<h3 class="mt-4">
-
-<%= service.title %>
-
-</h3>
-
-<p>
-
-<%= service.description %>
-
-</p>
-
-<a
-class="btn btn-dark mt-auto"
-href="/services/<%= service.slug %>">
-
-View Packages
-
-</a>
-
-</div>
-
-</div>
-
-<% }) %>
-
-</div>
-
-</div>
-
-</section>
+              <a
+                class="btn btn-dark mt-auto"
+                href="/services/<%= service.slug %>"
+              >
+                View packages →
+              </a>
+            </article>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+</main>
 
 <%- include("../partials/footer") %>

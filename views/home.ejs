@@ -1,96 +1,136 @@
-<%- include("partials/head") %>
+<%- include("partials/head", { bodyClass: "ascii-home" }) %>
 <%- include("partials/navbar") %>
 <%- include("partials/messages") %>
 
-<main>
-  <section class="simple-hero">
-    <div class="container text-center">
-      <p class="simple-brand">CraftShop</p>
+<div class="ascii-entry" aria-hidden="true">
+  <div class="ascii-entry__content">
+    <span class="ascii-entry__mark">[ C/S ]</span>
+    <span class="ascii-entry__name">CRAFTSHOP</span>
+    <span class="ascii-entry__status">INITIALIZING CREATIVE SYSTEM...</span>
+    <span class="ascii-entry__bar">[<i></i>]</span>
+  </div>
+</div>
 
-      <h1 class="display-3 fw-bold">
-        Professional Digital Services
+<main class="ascii-main">
+  <section class="ascii-hero" aria-labelledby="hero-title">
+    <div class="ascii-sky" aria-hidden="true"></div>
+
+    <div class="ascii-sun" aria-hidden="true">
+      <span>\ | /</span>
+      <span>— ( ) —</span>
+      <span>/ | \</span>
+    </div>
+
+    <div class="ascii-hero__copy">
+
+      <p class="ascii-eyebrow">Independent digital craft studio</p>
+      <h1 id="hero-title">
+        Ideas, built
+        <span>with intention.</span>
       </h1>
-
-      <p class="lead simple-hero-text">
-        Straightforward digital services for businesses,
-        creators, students, and professionals.
+      <p class="ascii-intro">
+        Websites, visual design, and career tools made for
+        people with something worth sharing.
       </p>
 
-      <a href="/services" class="btn btn-primary btn-lg px-5 mt-3">
-        Browse Services
-      </a>
-
-      <div class="service-checklist">
-        <span>
-          <i class="bi bi-check-circle-fill"></i>
-          Website Development
-        </span>
-
-        <span>
-          <i class="bi bi-check-circle-fill"></i>
-          Canva Design
-        </span>
-
-        <span>
-          <i class="bi bi-check-circle-fill"></i>
-          Resume Design
-        </span>
-
-        <span>
-          <i class="bi bi-check-circle-fill"></i>
-          Social Media
-        </span>
+      <div class="ascii-actions">
+        <a href="/services" class="ascii-button">
+          Explore services <span aria-hidden="true">→</span>
+        </a>
+        <a href="#selected-work" class="ascii-text-link">
+          See what we make ↓
+        </a>
       </div>
     </div>
+
+    <div class="ascii-landscape" aria-hidden="true">
+      <pre class="ascii-cloud ascii-cloud--one">
+            .----.
+        _.-'      '-._
+    _.-'   .--.       '-._
+_.-'____.-'    '-.________'-._
+      </pre>
+      <pre class="ascii-cloud ascii-cloud--two">
+        .---.             .---.
+    _.-'     '-._____.--'     '-._
+_.-'      .-.              .-.    '-._
+________.-' '-.__________.-' '-._______
+      </pre>
+      <pre class="ascii-cloud ascii-cloud--three">
+         .----.
+     _.-'      '-.__
+_.--'    .--.       '---._
+______.-'    '-.___________
+      </pre>
+      <div class="ascii-ground">
+        ........................................................................................................................
+        <span>_/\____/\_______/\____/\______/\________/\_____/\_____/\_______/\____</span>
+      </div>
+    </div>
+
+    <a href="#selected-work" class="ascii-scroll">
+      <span>SCROLL TO EXPLORE</span>
+      <i aria-hidden="true"></i>
+    </a>
   </section>
 
-  <section class="section-padding featured-simple">
+  <section class="ascii-services" id="selected-work">
     <div class="container">
-      <div class="text-center mb-5">
-        <p class="section-label">Featured Services</p>
-
-        <h2 class="display-5 fw-bold">
-          Services built to get the job done
-        </h2>
+      <div class="ascii-section-heading">
+        <div>
+          <p>SELECTED SERVICES</p>
+          <h2>Useful things,<br>carefully made.</h2>
+        </div>
+        <p class="ascii-section-note">
+          Clear process. Thoughtful details.<br>
+        </p>
       </div>
 
-      <div class="row g-4">
+      <div class="ascii-service-grid">
         <% featuredServices.forEach((service) => { %>
-          <div class="col-md-6 col-lg-4">
-            <article class="service-card">
-              <div class="service-icon">
+          <article class="ascii-service-card">
+            <div class="ascii-card-top">
+              <span>0<%= featuredServices.indexOf(service) + 1 %></span>
+              <span class="ascii-card-icon">
                 <i class="bi <%= service.icon %>"></i>
-              </div>
-
-              <h3 class="h4 fw-bold mt-4">
-                <%= service.title %>
-              </h3>
-
-              <p class="text-secondary">
-                <%= service.description %>
-              </p>
-
-              <div class="mt-auto pt-3">
-                <p class="mb-3">
-                  Starting from
-                  <strong class="service-price">
-                    $<%= service.price %>
-                  </strong>
-                </p>
-
-                <a
-                  href="/services"
-                  class="btn btn-dark w-100"
-                >
-                  View Service
-                </a>
-              </div>
-            </article>
-          </div>
+              </span>
+            </div>
+            <div>
+              <h3><%= service.title %></h3>
+              <p><%= service.description %></p>
+            </div>
+            <div class="ascii-card-footer">
+              <span>FROM $<%= service.price %></span>
+              <a href="/services" aria-label="View <%= service.title %>">↗</a>
+            </div>
+          </article>
         <% }) %>
+      </div>
+
+      <div class="ascii-cta">
+        <div aria-hidden="true" class="ascii-cta-art">
+          <span>+-------+</span>
+          <span>| MAKE  |----&gt; [ SOMETHING GOOD ]</span>
+          <span>+-------+</span>
+        </div>
+        <div>
+          <p>HAVE A PROJECT IN MIND?</p>
+          <h2>Let’s make it real.</h2>
+        </div>
+        <a href="/services" class="ascii-button ascii-button--light">
+          Start a project <span aria-hidden="true">→</span>
+        </a>
       </div>
     </div>
   </section>
 </main>
+
+<noscript>
+  <style>
+    .ascii-entry {
+      display: none;
+    }
+  </style>
+</noscript>
 
 <%- include("partials/footer") %>
