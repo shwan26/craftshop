@@ -196,43 +196,6 @@ ADMIN_NAME
 ADMIN_EMAIL
 ADMIN_PASSWORD
 ```
-
----
-
-## Screenshots
-
-### Home
-
-> Add screenshot here
-
-### Services
-
-> Add screenshot here
-
-### Service Details
-
-> Add screenshot here
-
-### Shopping Cart
-
-> Add screenshot here
-
-### Checkout
-
-> Add screenshot here
-
-### Customer Dashboard
-
-> Add screenshot here
-
-### Order Workspace
-
-> Add screenshot here
-
-### Admin Dashboard
-
-> Add screenshot here
-
 ---
 
 ## Future Improvements
